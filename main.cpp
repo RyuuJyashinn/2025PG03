@@ -30,8 +30,8 @@ int main() {
 	
 	
 
-	PFunc callback = [=](int* waitTime, int* diceResult) {
-		DispResult(waitTime, diceResult); 
+	PFunc callback = [=](int* second, int* diceResult) {
+		DispResult(second, diceResult);
 
 		if (answer == (*diceResult % 2)) {
 			printf("正解です！おめでとうございます！\n");
