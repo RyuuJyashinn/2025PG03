@@ -1,8 +1,9 @@
 ﻿#include <stdio.h>
 #include <windows.h>
 #include <time.h>
+#include <functional>
 
-typedef void (*PFunc)(int* x, int* y);
+typedef std::function<void(int*, int*)> PFunc;
 
 void DispResult(int* waitTime, int* diceResult) {
 	printf("%d秒待って実行されます\n", *waitTime);
@@ -27,15 +28,19 @@ int main() {
 	printf("サイコロの奇数・偶数を当てみよう\n偶数なら0、奇数なら1を入力してください\n");
 	scanf_s("%d", &answer);	
 	
-	setTimeout(DispResult, 3, dice);
+	
 
-	if (answer == (dice % 2)) {
+	PFunc callback = [=](int* waitTime, int* diceResult) {
+		DispResult(waitTime, diceResult); 
 
-		printf("正解です！おめでとうございます！\n");
+		if (answer == (*diceResult % 2)) {
+			printf("正解です！おめでとうございます！\n");
+		} else {
+			printf("不正解です。残念でした！\n");
+		}
 
-	} else {
-		printf("不正解です。残念でした！\n");
+		};
 
-	}
+	setTimeout(callback, 3, dice);
 	return 0;
 }
