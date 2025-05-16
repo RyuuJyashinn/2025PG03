@@ -1,46 +1,53 @@
 ﻿#include <stdio.h>
-#include <windows.h>
-#include <time.h>
-#include <functional>
+#include<iostream>
+using namespace std;
 
-typedef std::function<void(int*, int*)> PFunc;
 
-void DispResult(int* waitTime, int* diceResult) {
-	printf("%d秒待って実行されます\n", *waitTime);
+class Enemy {
+public:
+	void Update();
+	void approach();
+	void attatck();
+	void escape();
 
-	if (*diceResult % 2 == 0)
-		printf("サイコロの出目は %d（偶数）です\n", *diceResult);
-	else
-		printf("サイコロの出目は %d（奇数）です\n", *diceResult);
-}
+private:
+	int index = 0;
+	static void (Enemy::* pFunc[])();
+};
 
-void setTimeout(PFunc p, int second, int diceResult) {
-	Sleep(second * 1000);
-	p(&second, &diceResult);
-}
+void Enemy::approach() {
+	printf("敵は接近中！");
+};
+void Enemy::attatck() {
+	printf("敵は攻撃している！");
+};
+void Enemy::escape() {
+	printf("敵は逃げている！");
+};
+
+void (Enemy::* Enemy::pFunc[])() = {
+	&Enemy::approach,
+	&Enemy::attatck,
+	&Enemy::escape
+};
+
+
+void Enemy::Update() {
+	(this->*pFunc[index])();
+
+	cout << "次の状態に移行しますか？ (0: はい、他: いいえ): ";
+	int input;
+	cin >> input;
+
+	if (input == 0) {
+		index = (index + 1) % 3;
+	}
+};
 
 int main() {
-	int answer;
-	int dice;
-	srand(static_cast<unsigned int>(time(NULL)));
-	dice = rand() % 6 + 1;
+	Enemy enemy;
 
-	printf("サイコロの奇数・偶数を当てみよう\n偶数なら0、奇数なら1を入力してください\n");
-	scanf_s("%d", &answer);	
-	
-	
+	while (1)enemy.Update();
 
-	PFunc callback = [=](int* second, int* diceResult) {
-		DispResult(second, diceResult);
-
-		if (answer == (*diceResult % 2)) {
-			printf("正解です！おめでとうございます！\n");
-		} else {
-			printf("不正解です。残念でした！\n");
-		}
-
-		};
-
-	setTimeout(callback, 3, dice);
 	return 0;
 }
