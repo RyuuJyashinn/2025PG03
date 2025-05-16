@@ -1,53 +1,35 @@
 ﻿#include <stdio.h>
 #include<iostream>
-using namespace std;
 
-
-class Enemy {
-public:
-	void Update();
-	void approach();
-	void attatck();
-	void escape();
-
+template <typename Type1, typename Type2>
+class myCompare {
 private:
-	int index = 0;
-	static void (Enemy::* pFunc[])();
-};
+	Type1 num1;
+	Type2 num2;
+public:
+	myCompare(Type1 temp1, Type2 temp2) : num1(temp1), num2(temp2) {}
 
-void Enemy::approach() {
-	printf("敵は接近中！");
-};
-void Enemy::attatck() {
-	printf("敵は攻撃している！");
-};
-void Enemy::escape() {
-	printf("敵は逃げている！");
-};
+	Type1 Min(){
+  if (num1 < num2)
+			return static_cast<Type1>(num1);
+		else
+			return static_cast<Type1>(num2);
 
-void (Enemy::* Enemy::pFunc[])() = {
-	&Enemy::approach,
-	&Enemy::attatck,
-	&Enemy::escape
-};
-
-
-void Enemy::Update() {
-	(this->*pFunc[index])();
-
-	cout << "次の状態に移行しますか？ (0: はい、他: いいえ): ";
-	int input;
-	cin >> input;
-
-	if (input == 0) {
-		index = (index + 1) % 3;
 	}
 };
 
 int main() {
-	Enemy enemy;
+	myCompare<int, float> result1(100,50.0f);
+	std::cout << "int(100)　と float(50.0f) を比べて小さい数字を返す：" << result1.Min() << std::endl;
+	myCompare<int, double> result2(80, 20.0);
+	std::cout << "int(80)　と double(20.0) を比べて小さい数字を返す：" << result2.Min() << std::endl;
+	myCompare<float, int> result3(2.0f, 18);
+    std::cout << "float(2.0f)　と int(18) を比べて小さい数字を返す：" << result3.Min() << std::endl;
+	myCompare<float, double> result4(11.0f, 3.5);
+	std::cout << "float(11.0f)　と double(3.5) を比べて小さい数字を返す：" << result4.Min() << std::endl;
+	myCompare<double,int> result5(234.0, 123);
+	std::cout << "double(234.0)　と int(123) を比べて小さい数字を返す：" << result5.Min() << std::endl;
 
-	while (1)enemy.Update();
 
 	return 0;
 }
