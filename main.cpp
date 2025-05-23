@@ -1,33 +1,32 @@
 ﻿#include <stdio.h>
 #include<iostream>
-
-class Vehicle {
-public:
-    virtual void engineType() const = 0;
-};
-
-class Ev : public Vehicle {
-public:
-    void engineType() const override {
-        printf("Electric ButterEngine\n");
-    }
-};
-
-class Car :public Vehicle {
-public:
-    void engineType() const override {
-        printf("Gasoline Engine\n");
-    }
-};
+#include"Circle.h"
+#include"Rectangle.h"
 
 int main() {
-    Vehicle* vehicle1 = new Ev();
-    Vehicle* vehicle2 = new Car();
+	Circle* circle = new Circle();
+	Rectangle* rectangle = new Rectangle();
+	float width1 = 0;
+	float width2 = 0;
+	float height1 = 0;
+	float height2 = 0;
 
-    vehicle1->engineType();
-    vehicle2->engineType();
+	printf("円の半径を入力してください\n");
+	scanf_s("%f", &width1);  
+	height1 = width1;
 
-    delete vehicle1;
-    delete vehicle2;
+	printf("矩形の幅と高さを入力してください\n");
+
+	scanf_s("%f %f", &width2, &height2);  
+
+
+	circle->Size(width1, height1);
+	rectangle->Size(width2, height2);
+
+	circle->Draw();
+	rectangle->Draw();
+
+	delete circle;
+	delete rectangle;
 	return 0;
 }
