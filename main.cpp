@@ -70,6 +70,7 @@ int main() {
             }
         }
     }
+
     vector<string> emails_output;
     for (int i = 0; i < indices.size(); ++i) {
         int index = indices[i];
