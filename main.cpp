@@ -1,42 +1,31 @@
-﻿#include <stdio.h>
-#include <iostream>
-#include <list>
-#include <thread>
-using namespace std;
-
-void AddFour(int num, int& result) {
-    result = num + 4;
-}
-
-void MulFour(int num, int& result) {
-    result = num * 4;
-}
-
-void PowFour(int num, int& result) {
-    result = num * num;
-    result = result * result;
-}
+﻿#include <iostream>
+#include <string>
+#include <chrono>
 
 int main() {
-    int num;
-    cout << "Input The Number: ";
-    cin >> num;
+    // 1,000,000文字の 'a' で初期化された文字列を作成
+    std::string a(1000000, 'a');
 
-    int addResult;
-    int mulResult;
-    int powResult;
+    // コピーにかかる時間を計測
+    auto start_copy = std::chrono::high_resolution_clock::now();
+    std::string b = a;  // aをbにコピー
+    auto end_copy = std::chrono::high_resolution_clock::now();
+    auto copy_duration = std::chrono::duration_cast<std::chrono::microseconds>(end_copy - start_copy).count();
 
-    thread t1(AddFour, num, ref(addResult));
-    thread t2(MulFour, num, ref(mulResult));
-    thread t3(PowFour, num, ref(powResult));
+    // ムーブにかかる時間を計測
+    auto start_move = std::chrono::high_resolution_clock::now();
+    std::string c = std::move(a);  // aをcにムーブ
+    auto end_move = std::chrono::high_resolution_clock::now();
+    auto move_duration = std::chrono::duration_cast<std::chrono::microseconds>(end_move - start_move).count();
 
-    t1.join();
-    t2.join();
-    t3.join();
+    // 結果を表示
+    std::cout << "1,000,000文字を移動とコピーで比較" << std::endl;
+    std::cout << "コピー: " << copy_duration << " μs" << std::endl;
+    std::cout << "移動  : " << move_duration << " μs" << std::endl;
 
-    cout << "AddResult: " << addResult << endl;
-    cout << "MulResult: " << mulResult << endl;
-    cout << "PowResult: " << powResult << endl;
+    // 終了待機
+    std::cout << "続行するには何かキーを押してください…";
+    std::cin.get();
 
     return 0;
 }
